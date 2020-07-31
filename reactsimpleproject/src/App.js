@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import axios from 'axios'
 import './App.css'
 
+import moment from "moment";
 import MaterialTable from 'material-table'
 import Container from '@material-ui/core/Container';
 
@@ -20,6 +21,11 @@ class App extends Component {
                 {
                     title: 'Name',
                     field: 'name',
+                },
+                {
+                    title: 'Birthday',
+                    field: 'birthday',
+                    type: 'date'
                 },
             ],
             list: [
@@ -50,7 +56,7 @@ class App extends Component {
 
     render() {
         return (
-            <Container maxWidth="lg">
+            <Container maxWidth="lg" h>
                 <MaterialTable
                     title="User Information"
                     columns={this.state.columns}
@@ -58,7 +64,8 @@ class App extends Component {
                     editable={{
                         onRowAdd: (newData) =>
                             new Promise((resolve) => {
-                                axios.post('/user/post', {name: newData.name})
+                                let birthday= moment(newData.birthday).format('YYYY-MM-DD')
+                                axios.post('/user/post', {id:newData.id,name:newData.name,birthday:birthday})
                                 setTimeout(() => {
                                     resolve();
                                     this.setState((prevState) => {
@@ -70,7 +77,8 @@ class App extends Component {
                             }),
                         onRowUpdate: (newData, oldData) =>
                             new Promise((resolve) => {
-                                axios.post(`/user/post`, {id: newData.id, name: newData.name})
+                                let birthday= moment(newData.birthday).format('YYYY-MM-DD')
+                                axios.post(`/user/post`, {id:newData.id,name:newData.name,birthday:birthday})
                                 setTimeout(() => {
                                     resolve();
                                     if (oldData) {
@@ -84,6 +92,7 @@ class App extends Component {
                             }),
                         onRowDelete: (oldData) =>
                             new Promise((resolve) => {
+                                oldData.birthday= moment(oldData.birthday).format('YYYY-MM-DD')
                                 axios.get(`/user/delete`, {params: {id:oldData.id}})
                                 setTimeout(() => {
                                     resolve();
