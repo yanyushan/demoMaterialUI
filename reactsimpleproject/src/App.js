@@ -92,7 +92,6 @@ class App extends Component {
                             }),
                         onRowDelete: (oldData) =>
                             new Promise((resolve) => {
-                                oldData.birthday= moment(oldData.birthday).format('YYYY-MM-DD')
                                 axios.get(`/user/delete`, {params: {id:oldData.id}})
                                 setTimeout(() => {
                                     resolve();
