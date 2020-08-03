@@ -57,10 +57,9 @@ class App extends Component {
         return {
             head: {
                 version: "HTTP/1.1",
+                method: "POST"
             },
-            body: {
-                msg: rowData,
-            }
+            msg: rowData,
         }
     }
 
