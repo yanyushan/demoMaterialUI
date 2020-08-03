@@ -20,6 +20,7 @@ public class UserController {
     private static final Logger log = Logger.getLogger(UserController.class);
     @Autowired
     private UserRepository userRepository;
+
     //查
     @RequestMapping("/query")
     public List<User> getList() {
@@ -29,52 +30,49 @@ public class UserController {
 
     @RequestMapping("/post")
     public Object saveUser(@RequestBody JSONObject requestData) {
-        User user=parseUser(requestData);
+        User user = parseUser(requestData);
         this.userRepository.save(user);
         return this.userRepository.findAll();
     }
+
     @RequestMapping("/delete")//删
     public Object delUser(@RequestBody JSONObject requestData) {
-        User user=parseUser(requestData);
+        User user = parseUser(requestData);
         this.userRepository.delete(user);
         return this.userRepository.findAll();
     }
+
     @RequestMapping("/filter")
-    public List<User> getSome(@RequestParam("lower") Integer lower,@RequestParam("upper") Integer upper){
-        return this.userRepository.findBetween(lower,upper);
+    public List<User> getSome(@RequestParam("lower") Integer lower, @RequestParam("upper") Integer upper) {
+        return this.userRepository.findBetween(lower, upper);
     }
 
-    private User parseUser(JSONObject requestData){
-        JSONObject jsonObj=requestData.getJSONObject("requestData").getJSONObject("body").getJSONObject("msg");
+    private User parseUser(JSONObject requestData) {
+        User user=new User();
+        JSONObject jsonObj = requestData.getJSONObject("requestData").getJSONObject("msg");
 
-        Integer id = null;
-        try {
-            id = jsonObj.getInteger("id");
-        } catch (Exception e) {
-            log.warn("Cannot find user id!"+e.toString());
+        if (jsonObj.containsKey("id")) {
+            Integer id = jsonObj.getInteger("id");
+            user.setId(id);
+        }else {
+            log.warn("No user id!");
         }
-
-        String name= null;
-        try {
-            name = jsonObj.getString("name");
-            if(name.equals("")){
-                log.debug("Invalid user name!");
+        if (jsonObj.containsKey("name")) {
+            String name = jsonObj.getString("name");
+            user.setName(name);
+        }else {
+            log.warn("No user name!");
+        }
+        if (jsonObj.containsKey("birthday")) {
+            Date birthday = jsonObj.getDate("birthday");
+            if (birthday.after(new Date())) {
+                log.warn("Invalid birthday!");
             }
-        } catch (Exception e) {
-            log.warn("Cannot find user name!"+e.toString());
+            user.setBirthday(birthday);
+        }else {
+            log.warn("No user birthday!");
         }
-
-        Date birthday= null;
-        try {
-            birthday = jsonObj.getDate("birthday");
-            if(birthday.after(new Date())){
-                log.debug("Invalid birthday!");
-            }
-        } catch (Exception e) {
-            log.warn("Cannot find user birthday!"+e.toString());
-        }
-        return new User(id,name,birthday);
+        return user;
     }
-
 
 }
