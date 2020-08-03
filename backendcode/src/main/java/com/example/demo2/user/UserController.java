@@ -48,31 +48,16 @@ public class UserController {
     }
 
     private User parseUser(JSONObject requestData) {
-        User user=new User();
         JSONObject jsonObj = requestData.getJSONObject("requestData").getJSONObject("msg");
 
-        if (jsonObj.containsKey("id")) {
             Integer id = jsonObj.getInteger("id");
-            user.setId(id);
-        }else {
-            log.warn("No user id!");
-        }
-        if (jsonObj.containsKey("name")) {
             String name = jsonObj.getString("name");
-            user.setName(name);
-        }else {
-            log.warn("No user name!");
-        }
-        if (jsonObj.containsKey("birthday")) {
             Date birthday = jsonObj.getDate("birthday");
             if (birthday.after(new Date())) {
                 log.warn("Invalid birthday!");
             }
-            user.setBirthday(birthday);
-        }else {
-            log.warn("No user birthday!");
-        }
-        return user;
+
+        return new User(id,name,birthday);
     }
 
 }
