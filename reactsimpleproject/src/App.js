@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import axios from 'axios'
 import './App.css'
 
-import moment from "moment";
 import MaterialTable from 'material-table'
 import Container from '@material-ui/core/Container';
 
@@ -15,16 +14,16 @@ class App extends Component {
             columns: [
                 {
                     title: 'ID',
-                    field: 'id',
+                    field: "id",
                     type: 'numeric',
                 },
                 {
                     title: 'Name',
-                    field: 'name',
+                    field: "name",
                 },
                 {
                     title: 'Birthday',
-                    field: 'birthday',
+                    field: "birthday",
                     type: 'date'
                 },
             ],
@@ -54,6 +53,17 @@ class App extends Component {
         })
     };
 
+    requestData = (rowData) => {
+        return {
+            head: {
+                version: "HTTP/1.1",
+            },
+            body: {
+                msg: rowData,
+            }
+        }
+    }
+
     render() {
         return (
             <Container maxWidth="lg" h>
@@ -64,8 +74,8 @@ class App extends Component {
                     editable={{
                         onRowAdd: (newData) =>
                             new Promise((resolve) => {
-                                let birthday= moment(newData.birthday).format('YYYY-MM-DD')
-                                axios.post('/user/post', {id:newData.id,name:newData.name,birthday:birthday})
+                                let requestData = this.requestData(newData)
+                                axios.post(`/user/post`, {requestData})
                                 setTimeout(() => {
                                     resolve();
                                     this.setState((prevState) => {
@@ -77,8 +87,8 @@ class App extends Component {
                             }),
                         onRowUpdate: (newData, oldData) =>
                             new Promise((resolve) => {
-                                let birthday= moment(newData.birthday).format('YYYY-MM-DD')
-                                axios.post(`/user/post`, {id:newData.id,name:newData.name,birthday:birthday})
+                                let requestData = this.requestData(newData)
+                                axios.post(`/user/post`, {requestData})
                                 setTimeout(() => {
                                     resolve();
                                     if (oldData) {
@@ -92,7 +102,8 @@ class App extends Component {
                             }),
                         onRowDelete: (oldData) =>
                             new Promise((resolve) => {
-                                axios.get(`/user/delete`, {params: {id:oldData.id}})
+                                let requestData = this.requestData(oldData)
+                                axios.post(`/user/delete`, {requestData})
                                 setTimeout(() => {
                                     resolve();
                                     this.setState((prevState) => {
