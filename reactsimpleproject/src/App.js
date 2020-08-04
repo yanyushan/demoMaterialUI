@@ -31,7 +31,7 @@ class App extends Component {
                 {
                     id: '',
                     name: '',
-                    birthday:'',
+                    birthday: '',
                 },
             ],
         }
@@ -42,17 +42,21 @@ class App extends Component {
         let self = this;
         setTimeout(function () {
             self.query();
-        }, 500)
+        }, 600)
 
     }
 
     query = () => {
-        axios.get('/user/query').then((data) => {
+        axios.get('/user/query').then((responseData) => {
             this.setState({
-                list: data.data.data
+                list: responseData.data.data
             });
         })
     };
+
+    validRequest = (requestData) => {
+        return (requestData.name != null);
+    }
 
     requestData = (rowData) => {
         return {
@@ -74,55 +78,80 @@ class App extends Component {
                     editable={{
                         onRowAdd: (newData) =>
                             new Promise((resolve) => {
-                                let requestData = this.requestData(newData)
-                                axios.post(`/user/post`, {requestData})
-                                setTimeout(() => {
+                                if (this.validRequest(newData)) {
+                                    let requestData = this.requestData(newData)
+                                    axios.post(`/user/post`, {requestData}).then((responseData) => {
+                                        if (responseData.data.code === 200) {
+                                            setTimeout(() => {
+                                                resolve();
+                                                this.setState((prevState) => {
+                                                    const list = [...prevState.list];
+                                                    list.push(newData);
+                                                    return {...prevState, list};
+                                                });
+                                            }, 600);
+
+                                        } else {
+                                            resolve();
+                                            alert("responseData.data.status+responseData.data.error")
+                                            console.log(responseData.data.status + responseData.data.error)
+                                        }
+                                    })
+                                } else {
                                     resolve();
-                                    this.setState((prevState) => {
-                                        const list = [...prevState.list];
-                                        list.push(newData);
-                                        return {...prevState, list};
-                                    });
-                                }, 600);
-                                if(newData.name === ""){
-                                    alert("姓名不能为空")
+                                    alert("Invalid Info")
                                 }
                             }),
                         onRowUpdate: (newData, oldData) =>
                             new Promise((resolve) => {
-                                if(newData.name === ""){
-                                    alert("姓名不能为空")
-                                }
-                                let requestData = this.requestData(newData)
-                                axios.post(`/user/post`, {requestData})
-                                setTimeout(() => {
+                                if (this.validRequest(newData)) {
+                                    let requestData = this.requestData(newData)
+                                    axios.post(`/user/post`, {requestData}).then((responseData) => {
+                                        if (responseData.data.code === 200) {
+                                            setTimeout(() => {
+                                                resolve();
+                                                if (oldData) {
+                                                    this.setState((prevState) => {
+                                                        const list = [...prevState.list];
+                                                        list[list.indexOf(oldData)] = newData;
+                                                        return {...prevState, list};
+                                                    });
+                                                }
+                                            }, 600);
+                                        } else {
+                                            resolve();
+                                            alert("Request faild!")
+                                            console.log("Invalid response!")
+                                        }
+                                    })
+                                } else {
                                     resolve();
-                                    if (oldData) {
-                                        this.setState((prevState) => {
-                                            const list = [...prevState.list];
-                                            list[list.indexOf(oldData)] = newData;
-                                            return {...prevState, list};
-                                        });
-                                    }
-                                }, 600);
+                                    alert("Invalid Info")
+                                }
                             }),
                         onRowDelete: (oldData) =>
                             new Promise((resolve) => {
                                 let requestData = this.requestData(oldData)
-                                axios.post(`/user/delete`, {requestData})
-                                setTimeout(() => {
-                                    resolve();
-                                    this.setState((prevState) => {
-                                        const list = [...prevState.list];
-                                        list.splice(list.indexOf(oldData), 1);
-                                        return {...prevState, list};
-                                    });
-                                }, 600);
+                                axios.post(`/user/delete`, {requestData}).then((responseData) => {
+                                    if (responseData.data.code === 200) {
+                                        setTimeout(() => {
+                                            resolve();
+                                            this.setState((prevState) => {
+                                                const list = [...prevState.list];
+                                                list.splice(list.indexOf(oldData), 1);
+                                                return {...prevState, list};
+                                            });
+                                        }, 600);
+                                    } else {
+                                        resolve();
+                                        alert("Request faild!")
+                                        console.log("Invalid response!")
+                                    }
+                                })
                             }),
                     }}
                 />
             </Container>
-
         )
     }
 }
