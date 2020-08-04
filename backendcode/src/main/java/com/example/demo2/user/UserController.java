@@ -33,14 +33,22 @@ public class UserController {
     @RequestMapping("/post")
     public ApiResponse<User> saveUser(@RequestBody JSONObject requestData) {
         User user = ApiRequest.parseUser(requestData);
-        this.userRepository.save(user);
+        try {
+            this.userRepository.save(user);
+        } catch (Exception e) {
+            log.info("Failed to save user! "+e.toString());
+        }
         return ApiResponse.success(user);
     }
 
     @RequestMapping("/delete")//删
     public ApiResponse<User> delUser(@RequestBody JSONObject requestData) {
         User user = ApiRequest.parseUser(requestData);
-        this.userRepository.delete(user);
+        try {
+            this.userRepository.delete(user);
+        } catch (Exception e) {
+            log.info("Failed to delete user! "+e.toString());
+        }
         return ApiResponse.success(user);
     }
 

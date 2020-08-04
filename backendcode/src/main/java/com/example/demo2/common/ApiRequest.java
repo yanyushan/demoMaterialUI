@@ -11,16 +11,17 @@ public class ApiRequest {
     private static final Logger log = Logger.getLogger(UserController.class);
 
     public static User parseUser(JSONObject requestData) {
-        JSONObject jsonObj = requestData.getJSONObject("requestData").getJSONObject("msg");
+        User user=new User();
+        try {
+            JSONObject jsonObj = requestData.getJSONObject("requestData").getJSONObject("msg");
 
-        Integer id = jsonObj.getInteger("id");
-        String name = jsonObj.getString("name");
-        Date birthday = jsonObj.getDate("birthday");
-        if (birthday.after(new Date())) {
-            log.warn("Invalid birthday!");
+            user.setId(jsonObj.getInteger("id"));
+            user.setName(jsonObj.getString("name").trim());
+            user.setBirthday(jsonObj.getDate("birthday"));
+        } catch (Exception e) {
+            log.info("Parse user failed! "+e.toString());
         }
-
-        return new User(id,name,birthday);
+        return user;
     }
 }
 
