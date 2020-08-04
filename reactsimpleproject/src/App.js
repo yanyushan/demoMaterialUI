@@ -31,6 +31,7 @@ class App extends Component {
                 {
                     id: '',
                     name: '',
+                    birthday:'',
                 },
             ],
         }
@@ -46,6 +47,14 @@ class App extends Component {
     }
 
     query = () => {
+        // axios.get('/user/query').then((data) => {
+        //     console.log(data.data.data)
+        //     //let newd = JSON.stringify(data,['data'])
+        //     //console.log(newd)
+        //     this.setState({
+        //         list: data.data.data
+        //     });
+        // })
         axios.get('/user/query').then(({data}) => {
             this.setState({
                 list: data
@@ -83,9 +92,15 @@ class App extends Component {
                                         return {...prevState, list};
                                     });
                                 }, 600);
+                                if(newData.name === ""){
+                                    alert("姓名不能为空")
+                                }
                             }),
                         onRowUpdate: (newData, oldData) =>
                             new Promise((resolve) => {
+                                if(newData.name === ""){
+                                    alert("姓名不能为空")
+                                }
                                 let requestData = this.requestData(newData)
                                 axios.post(`/user/post`, {requestData})
                                 setTimeout(() => {
