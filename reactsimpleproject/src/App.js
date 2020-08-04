@@ -123,8 +123,7 @@ class App extends Component {
                                             }, 600);
                                         } else {
                                             resolve();
-                                            alert("Request faild!")
-                                            console.log("Invalid response!")
+                                            console.log(responseData.status)
                                         }
                                     })
                                 } else {
@@ -147,7 +146,7 @@ class App extends Component {
                                         }, 600);
                                     } else {
                                         resolve();
-                                        console.log("Invalid response!")
+                                        console.log(responseData.status)
                                     }
                                 })
                             }),
@@ -155,6 +154,8 @@ class App extends Component {
                 />
                 <Snackbar
                     open={this.state.open}
+                    anchorOrigin={{vertical:'top', horizontal: 'center'}}
+                    autoHideDuration={1000}
                     onClose={() => {
                         this.setState({open: false})
                     }}
