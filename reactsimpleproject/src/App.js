@@ -4,6 +4,7 @@ import './App.css'
 
 import MaterialTable from 'material-table'
 import Container from '@material-ui/core/Container';
+import moment from 'moment';
 
 //定义组件
 class App extends Component {
@@ -55,7 +56,8 @@ class App extends Component {
     };
 
     validRequest = (requestData) => {
-        return (requestData.name != null);
+        let now = moment().format('YYYY-MM-DD HH:mm:ss');
+        return !!(requestData.name != null && requestData.name !== "" && moment(requestData.birthday).isBefore(now));
     }
 
     requestData = (rowData) => {
