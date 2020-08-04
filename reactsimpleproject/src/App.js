@@ -47,17 +47,9 @@ class App extends Component {
     }
 
     query = () => {
-        // axios.get('/user/query').then((data) => {
-        //     console.log(data.data.data)
-        //     //let newd = JSON.stringify(data,['data'])
-        //     //console.log(newd)
-        //     this.setState({
-        //         list: data.data.data
-        //     });
-        // })
-        axios.get('/user/query').then(({data}) => {
+        axios.get('/user/query').then((data) => {
             this.setState({
-                list: data
+                list: data.data.data
             });
         })
     };
