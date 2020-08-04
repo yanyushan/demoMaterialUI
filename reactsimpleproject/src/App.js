@@ -4,6 +4,7 @@ import './App.css'
 
 import MaterialTable from 'material-table'
 import Container from '@material-ui/core/Container';
+import Snackbar from "@material-ui/core/Snackbar";
 import moment from 'moment';
 
 //定义组件
@@ -35,6 +36,7 @@ class App extends Component {
                     birthday: '',
                 },
             ],
+            open:false
         }
     }
 
@@ -54,6 +56,12 @@ class App extends Component {
             });
         })
     };
+    jumpTip = () =>{
+        this.setState({open:true})
+    }
+    handleClose = () =>{
+        this.setState({open:false})
+    }
 
     validRequest = (requestData) => {
         let now = moment().format('YYYY-MM-DD HH:mm:ss');
@@ -74,7 +82,7 @@ class App extends Component {
         return (
             <Container maxWidth="lg" h>
                 <MaterialTable
-                    title="User Information"
+                    title="USER INFORMATION"
                     columns={this.state.columns}
                     data={this.state.list}
                     editable={{
@@ -95,13 +103,12 @@ class App extends Component {
 
                                         } else {
                                             resolve();
-                                            alert("responseData.data.status+responseData.data.error")
-                                            console.log(responseData.data.status + responseData.data.error)
+                                            console.log(responseData.status)
                                         }
                                     })
                                 } else {
                                     resolve();
-                                    alert("Invalid Info")
+                                    this.jumpTip();
                                 }
                             }),
                         onRowUpdate: (newData, oldData) =>
@@ -128,7 +135,7 @@ class App extends Component {
                                     })
                                 } else {
                                     resolve();
-                                    alert("Invalid Info")
+                                    this.jumpTip();
                                 }
                             }),
                         onRowDelete: (oldData) =>
@@ -146,12 +153,16 @@ class App extends Component {
                                         }, 600);
                                     } else {
                                         resolve();
-                                        alert("Request faild!")
                                         console.log("Invalid response!")
                                     }
                                 })
                             }),
                     }}
+                />
+                <Snackbar
+                    open = {this.state.open}
+                    onClose = {this.handleClose}
+                    message = "Invalid Name or Birthday!"
                 />
             </Container>
         )
