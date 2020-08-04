@@ -36,7 +36,7 @@ class App extends Component {
                     birthday: '',
                 },
             ],
-            open:false
+            open: false
         }
     }
 
@@ -56,12 +56,6 @@ class App extends Component {
             });
         })
     };
-    jumpTip = () =>{
-        this.setState({open:true})
-    }
-    handleClose = () =>{
-        this.setState({open:false})
-    }
 
     validRequest = (requestData) => {
         let now = moment().format('YYYY-MM-DD HH:mm:ss');
@@ -108,7 +102,7 @@ class App extends Component {
                                     })
                                 } else {
                                     resolve();
-                                    this.jumpTip();
+                                    this.setState({open: true})
                                 }
                             }),
                         onRowUpdate: (newData, oldData) =>
@@ -135,7 +129,7 @@ class App extends Component {
                                     })
                                 } else {
                                     resolve();
-                                    this.jumpTip();
+                                    this.setState({open: true})
                                 }
                             }),
                         onRowDelete: (oldData) =>
@@ -160,9 +154,11 @@ class App extends Component {
                     }}
                 />
                 <Snackbar
-                    open = {this.state.open}
-                    onClose = {this.handleClose}
-                    message = "Invalid Name or Birthday!"
+                    open={this.state.open}
+                    onClose={() => {
+                        this.setState({open: false})
+                    }}
+                    message="Invalid name or birthday!"
                 />
             </Container>
         )
