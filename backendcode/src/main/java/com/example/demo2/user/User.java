@@ -1,9 +1,10 @@
 package com.example.demo2.user;
 
 
-
 import lombok.*;
 import lombok.experimental.Accessors;
+
+import javax.validation.constraints.NotBlank;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -25,6 +26,7 @@ public class User {
         return id;
     }
 
+    @NotBlank
     public String getName() {
         return name;
     }

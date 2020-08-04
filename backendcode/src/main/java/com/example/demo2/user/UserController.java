@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/user")
@@ -30,7 +31,7 @@ public class UserController {
 
     @RequestMapping("/post")
     public Object saveUser(@RequestBody JSONObject requestData) {
-        User user = parseUser(requestData);
+        @Valid User user = parseUser(requestData);
         this.userRepository.save(user);
         return this.userRepository.findAll();
     }
