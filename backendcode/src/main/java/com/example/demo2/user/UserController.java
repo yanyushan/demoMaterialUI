@@ -32,7 +32,7 @@ public class UserController {
 
     @RequestMapping("/post")
     public ApiResponse<User> saveUser(@RequestBody JSONObject requestData) {
-        @Valid User user = ApiRequest.parseUser(requestData);
+        User user = ApiRequest.parseUser(requestData);
         this.userRepository.save(user);
         return ApiResponse.success(user);
     }

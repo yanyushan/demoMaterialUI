@@ -26,7 +26,7 @@ public class User {
         return id;
     }
 
-    @NotBlank
+
     public String getName() {
         return name;
     }
