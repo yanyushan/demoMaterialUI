@@ -30,7 +30,7 @@ public class ApiResponse<T> implements Serializable {
     }
 
 
-    public static ApiResponse<Object> fail(ApiCode apiCode) {
-        return new ApiResponse<>(apiCode.code(), apiCode.getMsg(), "");
+    public static <T>ApiResponse<T> fail(T object) {
+        return new ApiResponse<>(ApiCode.API_USERNAME_EXIST.code(), ApiCode.API_USERNAME_EXIST.getMsg(), object);
     }
 }
