@@ -22,10 +22,7 @@ public class User {
     private String name;
     private Date birthday;
 
-    public Integer getId() {
-        return id;
-    }
-
+    public Integer getId() { return id; }
 
     public String getName() {
         return name;

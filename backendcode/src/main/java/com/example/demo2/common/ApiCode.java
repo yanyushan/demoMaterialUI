@@ -3,7 +3,7 @@ package com.example.demo2.common;
 public enum ApiCode {
 
     API_OK(200, "ok"),
-    API_USERNAME_EXIST(1001, "username exists");
+    API_USERNAME_EXIST(1001, "Operation failed!");
 
     private final int code;
 
