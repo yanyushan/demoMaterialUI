@@ -97,7 +97,7 @@ class App extends Component {
 
                                         } else {
                                             resolve();
-                                            console.log(responseData.status)
+                                            console.log(responseData.data.code + responseData.data.msg)
                                         }
                                     })
                                 } else {
@@ -123,7 +123,7 @@ class App extends Component {
                                             }, 600);
                                         } else {
                                             resolve();
-                                            console.log(responseData.status)
+                                            console.log(responseData.data.code + responseData.data.msg)
                                         }
                                     })
                                 } else {
@@ -146,7 +146,7 @@ class App extends Component {
                                         }, 600);
                                     } else {
                                         resolve();
-                                        console.log(responseData.status)
+                                        console.log(responseData.data.code + responseData.data.msg)
                                     }
                                 })
                             }),
@@ -154,7 +154,7 @@ class App extends Component {
                 />
                 <Snackbar
                     open={this.state.open}
-                    anchorOrigin={{vertical:'top', horizontal: 'center'}}
+                    anchorOrigin={{vertical: 'top', horizontal: 'center'}}
                     autoHideDuration={1000}
                     onClose={() => {
                         this.setState({open: false})
