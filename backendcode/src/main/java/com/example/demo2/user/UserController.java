@@ -34,9 +34,11 @@ public class UserController {
     public ApiResponse<User> saveUser(@RequestBody JSONObject requestData) {
         User user = ApiRequest.parseUser(requestData);
         try {
+            //int a=1/0;
             this.userRepository.save(user);
         } catch (Exception e) {
-            log.info("Failed to save user! "+e.toString());
+            log.info("Failed to save user! " + e.toString());
+            return ApiResponse.fail(user);
         }
         return ApiResponse.success(user);
     }
@@ -45,9 +47,11 @@ public class UserController {
     public ApiResponse<User> delUser(@RequestBody JSONObject requestData) {
         User user = ApiRequest.parseUser(requestData);
         try {
+            //int a = 1/0;
             this.userRepository.delete(user);
         } catch (Exception e) {
-            log.info("Failed to delete user! "+e.toString());
+            log.info("Failed to delete user! " + e.toString());
+            return ApiResponse.fail(user);
         }
         return ApiResponse.success(user);
     }
