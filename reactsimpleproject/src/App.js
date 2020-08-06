@@ -18,6 +18,7 @@ class App extends Component {
                     title: 'ID',
                     field: "id",
                     type: 'numeric',
+                    editable:'never'
                 },
                 {
                     title: 'Name',
@@ -90,6 +91,7 @@ class App extends Component {
                                                 resolve();
                                                 this.setState((prevState) => {
                                                     const list = [...prevState.list];
+                                                    newData.id=responseData.data.data.id
                                                     list.push(newData);
                                                     return {...prevState, list};
                                                 });
