@@ -1,7 +1,6 @@
 package com.example.demo2.common;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -21,16 +20,15 @@ public class ApiResponse<T> implements Serializable {
         this.data = data;
     }
 
-    public static ApiResponse<Object> success() {
-        return new ApiResponse<>(ApiCode.API_OK.code(), ApiCode.API_OK.getMsg(), "");
-    }
-
     public static <T> ApiResponse<T> success(T object) {
         return new ApiResponse<>(ApiCode.API_OK.code(), ApiCode.API_OK.getMsg(), object);
     }
 
+    public static <T>ApiResponse<T> requestFail(T object) {
+        return new ApiResponse<>(ApiCode.API_INVALID_USER.code(), ApiCode.API_INVALID_USER.getMsg(), object);
+    }
 
-    public static <T>ApiResponse<T> fail(T object) {
-        return new ApiResponse<>(ApiCode.API_USERNAME_EXIST.code(), ApiCode.API_USERNAME_EXIST.getMsg(), object);
+    public static <T>ApiResponse<T> responseFail(T object) {
+        return new ApiResponse<>(ApiCode.API_FAILED.code(), ApiCode.API_FAILED.getMsg(), object);
     }
 }
